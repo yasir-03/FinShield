@@ -1,0 +1,113 @@
+{% extends "base.html" %}
+{% block title %}Dashboard — FinShield AI{% endblock %}
+
+{% block content %}
+<section class="fs-page-header">
+    <div class="container">
+        <h1 class="text-white">Welcome back, {{ current_user.name.split(' ')[0] }} <i class="bi bi-emoji-smile"></i></h1>
+        <p class="text-white-50 mb-0">Here's a snapshot of your financial literacy journey.</p>
+    </div>
+</section>
+
+<section class="py-5 fs-section">
+    <div class="container">
+        <div class="row g-4 mb-4">
+            <div class="col-md-3 col-6">
+                <div class="fs-dash-stat">
+                    <i class="bi bi-patch-question text-primary"></i>
+                    <h3>{{ total_quizzes }}</h3>
+                    <p>Quizzes Taken</p>
+                </div>
+            </div>
+            <div class="col-md-3 col-6">
+                <div class="fs-dash-stat">
+                    <i class="bi bi-collection text-info"></i>
+                    <h3>{{ categories_attempted }}/9</h3>
+                    <p>Categories Explored</p>
+                </div>
+            </div>
+            <div class="col-md-3 col-6">
+                <div class="fs-dash-stat">
+                    <i class="bi bi-graph-up-arrow text-success"></i>
+                    <h3>{{ average_score }}%</h3>
+                    <p>Average Score</p>
+                </div>
+            </div>
+            <div class="col-md-3 col-6">
+                <div class="fs-dash-stat">
+                    <i class="bi bi-clipboard-check text-warning"></i>
+                    <h3>{{ "Yes" if survey_done else "No" }}</h3>
+                    <p>Survey Completed</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="row g-4">
+            <div class="col-lg-7">
+                <div class="fs-panel">
+                    <div class="d-flex justify-content-between align-items-center mb-3">
+                        <h5 class="mb-0"><i class="bi bi-clock-history me-2"></i>Recent Activity</h5>
+                        <a href="{{ url_for('quiz.categories') }}" class="fs-link small">Take another quiz <i class="bi bi-arrow-right"></i></a>
+                    </div>
+                    {% if results %}
+                    <div class="table-responsive">
+                        <table class="table fs-table align-middle">
+                            <thead><tr><th>Category</th><th>Score</th><th>Result</th><th>Date</th></tr></thead>
+                            <tbody>
+                            {% for r in results %}
+                                {% set label, color = grade_label(r.percentage) %}
+                                <tr>
+                                    <td class="text-capitalize">{{ r.category.replace('-', ' ') }}</td>
+                                    <td>{{ r.score }}/{{ r.total_questions }} ({{ r.percentage }}%)</td>
+                                    <td><span class="badge bg-{{ color }}">{{ label }}</span></td>
+                                    <td class="text-muted small">{{ r.taken_at.strftime('%d %b %Y') }}</td>
+                                </tr>
+                            {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                    {% else %}
+                    <div class="text-center py-4">
+                        <i class="bi bi-emoji-neutral fs-1 text-muted"></i>
+                        <p class="text-muted mt-2">You haven't taken any quizzes yet.</p>
+                        <a href="{{ url_for('quiz.categories') }}" class="btn btn-fs-primary">Take Your First Quiz</a>
+                    </div>
+                    {% endif %}
+                </div>
+
+                {% if not survey_done %}
+                <div class="fs-panel fs-panel-highlight mt-4">
+                    <div class="d-flex align-items-center gap-3">
+                        <i class="bi bi-clipboard-data fs-2 text-white"></i>
+                        <div class="flex-grow-1">
+                            <h6 class="text-white mb-1">Help improve community insights</h6>
+                            <p class="text-white-50 mb-0 small">Take our 2-minute anonymous survey to contribute to FinShield AI's analytics.</p>
+                        </div>
+                        <a href="{{ url_for('survey.survey_form') }}" class="btn btn-light btn-sm text-nowrap">Take Survey</a>
+                    </div>
+                </div>
+                {% endif %}
+            </div>
+
+            <div class="col-lg-5">
+                <div class="fs-panel h-100">
+                    <h5 class="mb-3"><i class="bi bi-lightbulb me-2"></i>Recommended for You</h5>
+                    {% for reason in recommendations.reasons %}
+                        <p class="text-muted small mb-3"><i class="bi bi-info-circle me-1"></i>{{ reason }}</p>
+                    {% endfor %}
+                    {% for article in recommendations.articles %}
+                        <a href="{{ url_for('main.learning_article', slug=article.slug) }}" class="fs-reco-item">
+                            <i class="bi {{ article.icon }}"></i>
+                            <div>
+                                <strong>{{ article.title }}</strong>
+                                <span>{{ article.summary }}</span>
+                            </div>
+                            <i class="bi bi-chevron-right ms-auto"></i>
+                        </a>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}

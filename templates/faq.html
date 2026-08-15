@@ -1,0 +1,50 @@
+{% extends "base.html" %}
+{% block title %}FAQ — FinShield AI{% endblock %}
+
+{% block content %}
+<section class="fs-page-header text-center">
+    <div class="container">
+        <h1 class="text-white">Frequently Asked Questions</h1>
+        <p class="text-white-50 mb-0">Everything you need to know about FinShield AI.</p>
+    </div>
+</section>
+
+<section class="py-5 fs-section">
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-lg-9">
+                <div class="accordion fs-accordion" id="faqFullAccordion">
+                    {% set faqs = [
+                        ("What is FinShield AI?", "FinShield AI is an AI-powered financial literacy and digital fraud awareness platform built as a Community Engagement Project. It offers learning modules, quizzes, calculators, an AI chatbot, and community analytics."),
+                        ("Is FinShield AI free to use?", "Yes, completely free. All learning content, quizzes, calculators, FinBot, and analytics are available at no cost to any user."),
+                        ("Do I need to create an account?", "You need an account to take quizzes and track your progress on the dashboard. Learning modules, calculators, the community survey, and FAQ are open to everyone."),
+                        ("How is my data used?", "Survey responses are collected anonymously and used only for aggregate analytics. Account information (name, email) is used solely to personalize your learning experience and is never sold or shared."),
+                        ("What topics does FinBot cover?", "FinBot can answer questions about savings, budgeting, inflation, UPI, digital banking, cyber fraud, mutual funds, insurance, investment, RBI, SEBI, financial planning, emergency funds, loans, and credit scores."),
+                        ("Does FinBot use a real AI model?", "If an OpenAI-compatible API key is configured on the server, FinBot uses it to generate responses. Otherwise, it automatically falls back to a comprehensive built-in knowledge base — so it always responds reliably."),
+                        ("How are quiz recommendations generated?", "After each quiz, FinShield AI uses rule-based logic to recommend relevant learning articles based on your score and category — e.g., scoring low in Cyber Fraud recommends our Cyber Security module."),
+                        ("Can I retake a quiz?", "Yes! You can retake any quiz as many times as you like. Each attempt is saved to your history so you can track improvement over time."),
+                        ("Who can see the admin panel?", "Only accounts marked as administrators can access the admin panel, which is used to monitor platform usage, moderate content, and view aggregate statistics."),
+                        ("How do I report a suspected fraud?", "This platform is for education, not fraud resolution. If you suspect you've been a victim of fraud, immediately report it at cybercrime.gov.in or call the national cyber fraud helpline 1930."),
+                    ] %}
+                    {% for q, a in faqs %}
+                    <div class="accordion-item">
+                        <h2 class="accordion-header">
+                            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#fullfaq{{ loop.index }}">
+                                {{ q }}
+                            </button>
+                        </h2>
+                        <div id="fullfaq{{ loop.index }}" class="accordion-collapse collapse" data-bs-parent="#faqFullAccordion">
+                            <div class="accordion-body">{{ a }}</div>
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+                <div class="text-center mt-5">
+                    <p class="text-muted">Still have questions?</p>
+                    <a href="{{ url_for('main.contact') }}" class="btn btn-fs-primary">Contact Us</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}

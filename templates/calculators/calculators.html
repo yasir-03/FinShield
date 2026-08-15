@@ -1,0 +1,162 @@
+{% extends "base.html" %}
+{% block title %}Financial Calculators — FinShield AI{% endblock %}
+
+{% block content %}
+<section class="fs-page-header text-center">
+    <div class="container">
+        <h1 class="text-white"><i class="bi bi-calculator me-2"></i>Financial Calculators</h1>
+        <p class="text-white-50 mb-0">Plan smarter with these interactive, real-time calculators.</p>
+    </div>
+</section>
+
+<section class="py-5 fs-section">
+    <div class="container">
+        <ul class="nav nav-pills fs-calc-tabs justify-content-center mb-4 flex-wrap" id="calcTabs" role="tablist">
+            <li class="nav-item"><button class="nav-link active" data-bs-toggle="pill" data-bs-target="#simple" type="button"><i class="bi bi-percent me-1"></i>Simple Interest</button></li>
+            <li class="nav-item"><button class="nav-link" data-bs-toggle="pill" data-bs-target="#compound" type="button"><i class="bi bi-graph-up me-1"></i>Compound Interest</button></li>
+            <li class="nav-item"><button class="nav-link" data-bs-toggle="pill" data-bs-target="#emi" type="button"><i class="bi bi-house-door me-1"></i>EMI</button></li>
+            <li class="nav-item"><button class="nav-link" data-bs-toggle="pill" data-bs-target="#sip" type="button"><i class="bi bi-piggy-bank me-1"></i>SIP</button></li>
+            <li class="nav-item"><button class="nav-link" data-bs-toggle="pill" data-bs-target="#goal" type="button"><i class="bi bi-flag me-1"></i>Savings Goal</button></li>
+            <li class="nav-item"><button class="nav-link" data-bs-toggle="pill" data-bs-target="#budget" type="button"><i class="bi bi-wallet2 me-1"></i>Budget Planner</button></li>
+        </ul>
+
+        <div class="tab-content">
+            <!-- SIMPLE INTEREST -->
+            <div class="tab-pane fade show active" id="simple">
+                <div class="row justify-content-center g-4">
+                    <div class="col-lg-5">
+                        <div class="fs-panel">
+                            <h5 class="mb-3">Simple Interest Calculator</h5>
+                            <div class="mb-3"><label class="form-label">Principal Amount (₹)</label><input type="number" id="si_principal" class="form-control fs-input" value="100000"></div>
+                            <div class="mb-3"><label class="form-label">Annual Interest Rate (%)</label><input type="number" id="si_rate" class="form-control fs-input" value="8"></div>
+                            <div class="mb-3"><label class="form-label">Time Period (Years)</label><input type="number" id="si_time" class="form-control fs-input" value="5"></div>
+                            <button class="btn btn-fs-primary w-100" onclick="calcSimpleInterest()">Calculate</button>
+                        </div>
+                    </div>
+                    <div class="col-lg-5">
+                        <div class="fs-panel fs-result-panel" id="si_result">
+                            <h6 class="text-muted">Result</h6>
+                            <p>Enter values and click Calculate.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- COMPOUND INTEREST -->
+            <div class="tab-pane fade" id="compound">
+                <div class="row justify-content-center g-4">
+                    <div class="col-lg-5">
+                        <div class="fs-panel">
+                            <h5 class="mb-3">Compound Interest Calculator</h5>
+                            <div class="mb-3"><label class="form-label">Principal Amount (₹)</label><input type="number" id="ci_principal" class="form-control fs-input" value="100000"></div>
+                            <div class="mb-3"><label class="form-label">Annual Interest Rate (%)</label><input type="number" id="ci_rate" class="form-control fs-input" value="8"></div>
+                            <div class="mb-3"><label class="form-label">Time Period (Years)</label><input type="number" id="ci_time" class="form-control fs-input" value="5"></div>
+                            <div class="mb-3"><label class="form-label">Compounding Frequency (per year)</label>
+                                <select id="ci_freq" class="form-select fs-input">
+                                    <option value="1">Annually</option>
+                                    <option value="2">Semi-Annually</option>
+                                    <option value="4">Quarterly</option>
+                                    <option value="12" selected>Monthly</option>
+                                </select>
+                            </div>
+                            <button class="btn btn-fs-primary w-100" onclick="calcCompoundInterest()">Calculate</button>
+                        </div>
+                    </div>
+                    <div class="col-lg-5">
+                        <div class="fs-panel fs-result-panel" id="ci_result">
+                            <h6 class="text-muted">Result</h6>
+                            <p>Enter values and click Calculate.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- EMI -->
+            <div class="tab-pane fade" id="emi">
+                <div class="row justify-content-center g-4">
+                    <div class="col-lg-5">
+                        <div class="fs-panel">
+                            <h5 class="mb-3">EMI Calculator</h5>
+                            <div class="mb-3"><label class="form-label">Loan Amount (₹)</label><input type="number" id="emi_principal" class="form-control fs-input" value="1000000"></div>
+                            <div class="mb-3"><label class="form-label">Annual Interest Rate (%)</label><input type="number" id="emi_rate" class="form-control fs-input" value="9"></div>
+                            <div class="mb-3"><label class="form-label">Loan Tenure (Years)</label><input type="number" id="emi_years" class="form-control fs-input" value="20"></div>
+                            <button class="btn btn-fs-primary w-100" onclick="calcEMI()">Calculate</button>
+                        </div>
+                    </div>
+                    <div class="col-lg-5">
+                        <div class="fs-panel fs-result-panel" id="emi_result">
+                            <h6 class="text-muted">Result</h6>
+                            <p>Enter values and click Calculate.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- SIP -->
+            <div class="tab-pane fade" id="sip">
+                <div class="row justify-content-center g-4">
+                    <div class="col-lg-5">
+                        <div class="fs-panel">
+                            <h5 class="mb-3">SIP Calculator</h5>
+                            <div class="mb-3"><label class="form-label">Monthly Investment (₹)</label><input type="number" id="sip_amount" class="form-control fs-input" value="5000"></div>
+                            <div class="mb-3"><label class="form-label">Expected Annual Return (%)</label><input type="number" id="sip_rate" class="form-control fs-input" value="12"></div>
+                            <div class="mb-3"><label class="form-label">Investment Duration (Years)</label><input type="number" id="sip_years" class="form-control fs-input" value="10"></div>
+                            <button class="btn btn-fs-primary w-100" onclick="calcSIP()">Calculate</button>
+                        </div>
+                    </div>
+                    <div class="col-lg-5">
+                        <div class="fs-panel fs-result-panel" id="sip_result">
+                            <h6 class="text-muted">Result</h6>
+                            <p>Enter values and click Calculate.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- SAVINGS GOAL -->
+            <div class="tab-pane fade" id="goal">
+                <div class="row justify-content-center g-4">
+                    <div class="col-lg-5">
+                        <div class="fs-panel">
+                            <h5 class="mb-3">Savings Goal Calculator</h5>
+                            <div class="mb-3"><label class="form-label">Target Amount (₹)</label><input type="number" id="goal_target" class="form-control fs-input" value="500000"></div>
+                            <div class="mb-3"><label class="form-label">Time to Reach Goal (Years)</label><input type="number" id="goal_years" class="form-control fs-input" value="5"></div>
+                            <div class="mb-3"><label class="form-label">Expected Annual Return (%)</label><input type="number" id="goal_rate" class="form-control fs-input" value="7"></div>
+                            <button class="btn btn-fs-primary w-100" onclick="calcSavingsGoal()">Calculate</button>
+                        </div>
+                    </div>
+                    <div class="col-lg-5">
+                        <div class="fs-panel fs-result-panel" id="goal_result">
+                            <h6 class="text-muted">Result</h6>
+                            <p>Enter values and click Calculate.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- BUDGET PLANNER -->
+            <div class="tab-pane fade" id="budget">
+                <div class="row justify-content-center g-4">
+                    <div class="col-lg-5">
+                        <div class="fs-panel">
+                            <h5 class="mb-3">Budget Planner (50-30-20 Rule)</h5>
+                            <div class="mb-3"><label class="form-label">Monthly Income (₹)</label><input type="number" id="budget_income" class="form-control fs-input" value="50000"></div>
+                            <button class="btn btn-fs-primary w-100" onclick="calcBudget()">Calculate</button>
+                        </div>
+                    </div>
+                    <div class="col-lg-5">
+                        <div class="fs-panel fs-result-panel" id="budget_result">
+                            <h6 class="text-muted">Result</h6>
+                            <p>Enter your income and click Calculate.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}
+
+{% block extra_js %}
+<script src="{{ url_for('static', filename='js/calculators.js') }}"></script>
+{% endblock %}

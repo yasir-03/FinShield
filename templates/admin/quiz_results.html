@@ -1,0 +1,49 @@
+{% extends "base.html" %}
+{% block title %}Quiz Results — Admin{% endblock %}
+
+{% block content %}
+<section class="fs-page-header">
+    <div class="container">
+        <h1 class="text-white"><i class="bi bi-patch-question me-2"></i>Quiz Results</h1>
+    </div>
+</section>
+
+<section class="py-5 fs-section">
+    <div class="container">
+        <div class="fs-admin-tabs mb-4">
+            <a href="{{ url_for('main.admin_dashboard') }}">Overview</a>
+            <a href="{{ url_for('main.admin_users') }}">Users</a>
+            <a href="{{ url_for('main.admin_quiz_results') }}" class="active">Quiz Results</a>
+            <a href="{{ url_for('main.admin_survey_results') }}">Survey Responses</a>
+            <a href="{{ url_for('main.admin_feedback') }}">Feedback</a>
+        </div>
+
+        <div class="fs-panel">
+            <div class="table-responsive">
+                <table class="table fs-table align-middle">
+                    <thead><tr><th>User</th><th>Category</th><th>Score</th><th>Time</th><th>Date</th><th></th></tr></thead>
+                    <tbody>
+                    {% for r in results %}
+                        <tr>
+                            <td>{{ r.user.name if r.user else 'Deleted User' }}</td>
+                            <td class="text-capitalize">{{ r.category.replace('-', ' ') }}</td>
+                            <td>{{ r.score }}/{{ r.total_questions }} ({{ r.percentage }}%)</td>
+                            <td class="text-muted">{{ r.time_taken }}s</td>
+                            <td class="text-muted small">{{ r.taken_at.strftime('%d %b %Y') }}</td>
+                            <td>
+                                <form method="POST" action="{{ url_for('main.admin_delete_quiz_result', result_id=r.id) }}" onsubmit="return confirm('Delete this result?');">
+                                    <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+                                    <button class="btn btn-sm btn-outline-danger"><i class="bi bi-trash"></i></button>
+                                </form>
+                            </td>
+                        </tr>
+                    {% else %}
+                        <tr><td colspan="6" class="text-center text-muted py-4">No quiz results yet.</td></tr>
+                    {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}

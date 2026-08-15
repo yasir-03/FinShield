@@ -1,0 +1,96 @@
+{% extends "base.html" %}
+{% block title %}Community Survey — FinShield AI{% endblock %}
+
+{% block content %}
+<section class="fs-page-header text-center">
+    <div class="container">
+        <h1 class="text-white"><i class="bi bi-clipboard-data me-2"></i>Community Survey</h1>
+        <p class="text-white-50 mb-0">Anonymous &middot; Takes about 2 minutes &middot; Helps improve financial literacy for everyone</p>
+    </div>
+</section>
+
+<section class="py-5 fs-section">
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-lg-8">
+                <div class="fs-panel">
+                    <form method="POST" action="{{ url_for('survey.survey_form') }}">
+                        <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+
+                        <div class="row g-3">
+                            <div class="col-md-6">
+                                <label class="form-label">Age</label>
+                                <input type="number" name="age" class="form-control fs-input" min="10" max="110" required value="{{ form_data.get('age', '') }}">
+                            </div>
+                            <div class="col-md-6">
+                                <label class="form-label">City</label>
+                                <input type="text" name="city" class="form-control fs-input" required value="{{ form_data.get('city', '') }}">
+                            </div>
+
+                            <div class="col-md-6">
+                                <label class="form-label">Occupation</label>
+                                <select name="occupation" class="form-select fs-input" required>
+                                    <option value="" disabled selected>Select occupation</option>
+                                    {% for o in occupations %}
+                                    <option value="{{ o }}" {% if form_data.get('occupation') == o %}selected{% endif %}>{{ o }}</option>
+                                    {% endfor %}
+                                </select>
+                            </div>
+                            <div class="col-md-6">
+                                <label class="form-label">Education Level</label>
+                                <select name="education" class="form-select fs-input" required>
+                                    <option value="" disabled selected>Select education level</option>
+                                    {% for e in educations %}
+                                    <option value="{{ e }}" {% if form_data.get('education') == e %}selected{% endif %}>{{ e }}</option>
+                                    {% endfor %}
+                                </select>
+                            </div>
+
+                            <div class="col-md-6">
+                                <label class="form-label">UPI Usage Frequency</label>
+                                <select name="upi_usage" class="form-select fs-input" required>
+                                    <option value="" disabled selected>Select frequency</option>
+                                    {% for u in upi_options %}
+                                    <option value="{{ u }}" {% if form_data.get('upi_usage') == u %}selected{% endif %}>{{ u }}</option>
+                                    {% endfor %}
+                                </select>
+                            </div>
+                            <div class="col-md-6">
+                                <label class="form-label">Investment Experience</label>
+                                <select name="investment_experience" class="form-select fs-input" required>
+                                    <option value="" disabled selected>Select experience</option>
+                                    {% for i in investment_options %}
+                                    <option value="{{ i }}" {% if form_data.get('investment_experience') == i %}selected{% endif %}>{{ i }}</option>
+                                    {% endfor %}
+                                </select>
+                            </div>
+
+                            <div class="col-md-6">
+                                <label class="form-label">Fraud Experience</label>
+                                <select name="fraud_experience" class="form-select fs-input" required>
+                                    <option value="" disabled selected>Select experience</option>
+                                    {% for f in fraud_options %}
+                                    <option value="{{ f }}" {% if form_data.get('fraud_experience') == f %}selected{% endif %}>{{ f }}</option>
+                                    {% endfor %}
+                                </select>
+                            </div>
+                            <div class="col-md-6">
+                                <label class="form-label">Financial Knowledge Level</label>
+                                <select name="financial_knowledge_level" class="form-select fs-input" required>
+                                    <option value="" disabled selected>Select level</option>
+                                    {% for k in knowledge_options %}
+                                    <option value="{{ k }}" {% if form_data.get('financial_knowledge_level') == k %}selected{% endif %}>{{ k }}</option>
+                                    {% endfor %}
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="form-text mt-3 mb-3"><i class="bi bi-shield-lock"></i> Your response is completely anonymous and used only for aggregate analytics.</div>
+                        <button type="submit" class="btn btn-fs-primary w-100 btn-lg">Submit Survey</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}

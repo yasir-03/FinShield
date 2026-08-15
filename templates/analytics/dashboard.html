@@ -1,0 +1,101 @@
+{% extends "base.html" %}
+{% block title %}Analytics — FinShield AI{% endblock %}
+
+{% block content %}
+<section class="fs-page-header text-center">
+    <div class="container">
+        <h1 class="text-white"><i class="bi bi-bar-chart-line me-2"></i>Community Analytics</h1>
+        <p class="text-white-50 mb-0">Aggregated, anonymized insights from FinShield AI's community survey.</p>
+    </div>
+</section>
+
+<section class="py-5 fs-section">
+    <div class="container">
+        <div class="row g-4 mb-4">
+            <div class="col-md-3 col-6">
+                <div class="fs-dash-stat">
+                    <i class="bi bi-people text-primary"></i>
+                    <h3>{{ total_participants }}</h3>
+                    <p>Survey Participants</p>
+                </div>
+            </div>
+            <div class="col-md-3 col-6">
+                <div class="fs-dash-stat">
+                    <i class="bi bi-award text-success"></i>
+                    <h3>{{ avg_awareness }}%</h3>
+                    <p>Avg. Awareness Score</p>
+                </div>
+            </div>
+            <div class="col-md-3 col-6">
+                <div class="fs-dash-stat">
+                    <i class="bi bi-patch-question text-info"></i>
+                    <h3>{{ quiz_total }}</h3>
+                    <p>Total Quizzes Taken</p>
+                </div>
+            </div>
+            <div class="col-md-3 col-6">
+                <div class="fs-dash-stat">
+                    <i class="bi bi-graph-up text-warning"></i>
+                    <h3>{{ avg_quiz_score }}%</h3>
+                    <p>Avg. Quiz Score</p>
+                </div>
+            </div>
+        </div>
+
+        {% if total_participants == 0 %}
+        <div class="fs-panel text-center py-5">
+            <i class="bi bi-clipboard-x fs-1 text-muted"></i>
+            <p class="text-muted mt-3 mb-0">No survey data yet. Be the first to contribute!</p>
+            <a href="{{ url_for('survey.survey_form') }}" class="btn btn-fs-primary mt-3">Take the Survey</a>
+        </div>
+        {% else %}
+        <div class="row g-4">
+            <div class="col-lg-6">
+                <div class="fs-panel">
+                    <h6 class="mb-3">Age Distribution</h6>
+                    <canvas id="ageChart"></canvas>
+                </div>
+            </div>
+            <div class="col-lg-6">
+                <div class="fs-panel">
+                    <h6 class="mb-3">Occupation Distribution</h6>
+                    <canvas id="occupationChart"></canvas>
+                </div>
+            </div>
+            <div class="col-lg-6">
+                <div class="fs-panel">
+                    <h6 class="mb-3">Investment Awareness / Experience</h6>
+                    <canvas id="investmentChart"></canvas>
+                </div>
+            </div>
+            <div class="col-lg-6">
+                <div class="fs-panel">
+                    <h6 class="mb-3">UPI Usage</h6>
+                    <canvas id="upiChart"></canvas>
+                </div>
+            </div>
+            <div class="col-lg-6">
+                <div class="fs-panel">
+                    <h6 class="mb-3">Fraud Awareness / Experience</h6>
+                    <canvas id="fraudChart"></canvas>
+                </div>
+            </div>
+            <div class="col-lg-6">
+                <div class="fs-panel">
+                    <h6 class="mb-3">Financial Literacy Level</h6>
+                    <canvas id="knowledgeChart"></canvas>
+                </div>
+            </div>
+        </div>
+        {% endif %}
+    </div>
+</section>
+{% endblock %}
+
+{% block extra_js %}
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.4/dist/chart.umd.min.js"></script>
+<script>
+    const CHART_DATA = {{ chart_data | tojson }};
+</script>
+<script src="{{ url_for('static', filename='js/charts.js') }}"></script>
+{% endblock %}

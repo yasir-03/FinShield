@@ -1,0 +1,52 @@
+{% extends "base.html" %}
+{% block title %}Survey Responses — Admin{% endblock %}
+
+{% block content %}
+<section class="fs-page-header">
+    <div class="container">
+        <h1 class="text-white"><i class="bi bi-clipboard-data me-2"></i>Survey Responses</h1>
+    </div>
+</section>
+
+<section class="py-5 fs-section">
+    <div class="container">
+        <div class="fs-admin-tabs mb-4">
+            <a href="{{ url_for('main.admin_dashboard') }}">Overview</a>
+            <a href="{{ url_for('main.admin_users') }}">Users</a>
+            <a href="{{ url_for('main.admin_quiz_results') }}">Quiz Results</a>
+            <a href="{{ url_for('main.admin_survey_results') }}" class="active">Survey Responses</a>
+            <a href="{{ url_for('main.admin_feedback') }}">Feedback</a>
+        </div>
+
+        <div class="fs-panel">
+            <div class="table-responsive">
+                <table class="table fs-table align-middle">
+                    <thead><tr><th>Age</th><th>Occupation</th><th>City</th><th>UPI Usage</th><th>Investment Exp.</th><th>Fraud Exp.</th><th>Knowledge</th><th>Date</th><th></th></tr></thead>
+                    <tbody>
+                    {% for r in responses %}
+                        <tr>
+                            <td>{{ r.age }}</td>
+                            <td>{{ r.occupation }}</td>
+                            <td>{{ r.city }}</td>
+                            <td>{{ r.upi_usage }}</td>
+                            <td>{{ r.investment_experience }}</td>
+                            <td>{{ r.fraud_experience }}</td>
+                            <td>{{ r.financial_knowledge_level }}</td>
+                            <td class="text-muted small">{{ r.submitted_at.strftime('%d %b %Y') }}</td>
+                            <td>
+                                <form method="POST" action="{{ url_for('main.admin_delete_survey_response', response_id=r.id) }}" onsubmit="return confirm('Delete this response?');">
+                                    <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+                                    <button class="btn btn-sm btn-outline-danger"><i class="bi bi-trash"></i></button>
+                                </form>
+                            </td>
+                        </tr>
+                    {% else %}
+                        <tr><td colspan="9" class="text-center text-muted py-4">No survey responses yet.</td></tr>
+                    {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}

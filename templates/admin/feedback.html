@@ -1,0 +1,42 @@
+{% extends "base.html" %}
+{% block title %}Feedback — Admin{% endblock %}
+
+{% block content %}
+<section class="fs-page-header">
+    <div class="container">
+        <h1 class="text-white"><i class="bi bi-envelope me-2"></i>User Feedback</h1>
+    </div>
+</section>
+
+<section class="py-5 fs-section">
+    <div class="container">
+        <div class="fs-admin-tabs mb-4">
+            <a href="{{ url_for('main.admin_dashboard') }}">Overview</a>
+            <a href="{{ url_for('main.admin_users') }}">Users</a>
+            <a href="{{ url_for('main.admin_quiz_results') }}">Quiz Results</a>
+            <a href="{{ url_for('main.admin_survey_results') }}">Survey Responses</a>
+            <a href="{{ url_for('main.admin_feedback') }}" class="active">Feedback</a>
+        </div>
+
+        {% for f in items %}
+        <div class="fs-panel mb-3">
+            <div class="d-flex justify-content-between align-items-start">
+                <div>
+                    <h6 class="mb-1">{{ f.subject or 'No Subject' }}</h6>
+                    <p class="text-muted small mb-2">{{ f.name }} &lt;{{ f.email }}&gt; &middot; {{ f.created_at.strftime('%d %b %Y, %I:%M %p') }}</p>
+                    <p class="mb-0">{{ f.message }}</p>
+                </div>
+                <form method="POST" action="{{ url_for('main.admin_delete_feedback', feedback_id=f.id) }}" onsubmit="return confirm('Delete this feedback?');">
+                    <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+                    <button class="btn btn-sm btn-outline-danger"><i class="bi bi-trash"></i></button>
+                </form>
+            </div>
+        </div>
+        {% else %}
+        <div class="fs-panel text-center py-5">
+            <p class="text-muted mb-0">No feedback received yet.</p>
+        </div>
+        {% endfor %}
+    </div>
+</section>
+{% endblock %}

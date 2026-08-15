@@ -1,0 +1,57 @@
+{% extends "base.html" %}
+{% block title %}Contact Us — FinShield AI{% endblock %}
+
+{% block content %}
+<section class="fs-page-header text-center">
+    <div class="container">
+        <h1 class="text-white">Get in Touch</h1>
+        <p class="text-white-50 mb-0">Questions, suggestions, or feedback — we'd love to hear from you.</p>
+    </div>
+</section>
+
+<section class="py-5 fs-section">
+    <div class="container">
+        <div class="row g-4">
+            <div class="col-lg-7">
+                <div class="fs-panel">
+                    <h5 class="mb-3"><i class="bi bi-envelope me-2"></i>Send Feedback</h5>
+                    <form method="POST" action="{{ url_for('main.contact') }}">
+                        <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+                        <div class="row g-3">
+                            <div class="col-md-6">
+                                <label class="form-label">Name</label>
+                                <input type="text" name="name" class="form-control fs-input" required value="{{ form_data.get('name') or (current_user.name if current_user.is_authenticated else '') }}">
+                            </div>
+                            <div class="col-md-6">
+                                <label class="form-label">Email</label>
+                                <input type="email" name="email" class="form-control fs-input" required value="{{ form_data.get('email') or (current_user.email if current_user.is_authenticated else '') }}">
+                            </div>
+                            <div class="col-12">
+                                <label class="form-label">Subject</label>
+                                <input type="text" name="subject" class="form-control fs-input" value="{{ form_data.get('subject','') }}">
+                            </div>
+                            <div class="col-12">
+                                <label class="form-label">Message / Suggestion</label>
+                                <textarea name="message" class="form-control fs-input" rows="5" required>{{ form_data.get('message','') }}</textarea>
+                            </div>
+                        </div>
+                        <button type="submit" class="btn btn-fs-primary mt-4 px-5">Send Message</button>
+                    </form>
+                </div>
+            </div>
+            <div class="col-lg-5">
+                <div class="fs-panel mb-4">
+                    <h5 class="mb-3"><i class="bi bi-info-circle me-2"></i>Quick Info</h5>
+                    <div class="fs-contact-item"><i class="bi bi-envelope-fill"></i> support@finshield.ai</div>
+                    <div class="fs-contact-item"><i class="bi bi-geo-alt-fill"></i> Community Engagement Project</div>
+                    <div class="fs-contact-item"><i class="bi bi-clock-fill"></i> We usually respond within 2-3 business days</div>
+                </div>
+                <div class="fs-panel fs-panel-highlight">
+                    <h6 class="text-white mb-2"><i class="bi bi-exclamation-triangle-fill me-2"></i>Reporting Fraud?</h6>
+                    <p class="text-white-50 small mb-0">This form is for feedback only. If you've experienced fraud, report immediately at <strong class="text-white">cybercrime.gov.in</strong> or call <strong class="text-white">1930</strong>.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}

@@ -1,0 +1,52 @@
+{% extends "base.html" %}
+{% block title %}Manage Users — FinShield AI{% endblock %}
+
+{% block content %}
+<section class="fs-page-header">
+    <div class="container">
+        <h1 class="text-white"><i class="bi bi-people me-2"></i>Manage Users</h1>
+    </div>
+</section>
+
+<section class="py-5 fs-section">
+    <div class="container">
+        <div class="fs-admin-tabs mb-4">
+            <a href="{{ url_for('main.admin_dashboard') }}">Overview</a>
+            <a href="{{ url_for('main.admin_users') }}" class="active">Users</a>
+            <a href="{{ url_for('main.admin_quiz_results') }}">Quiz Results</a>
+            <a href="{{ url_for('main.admin_survey_results') }}">Survey Responses</a>
+            <a href="{{ url_for('main.admin_feedback') }}">Feedback</a>
+        </div>
+
+        <div class="fs-panel">
+            <div class="table-responsive">
+                <table class="table fs-table align-middle">
+                    <thead><tr><th>Name</th><th>Email</th><th>Occupation</th><th>City</th><th>Role</th><th>Joined</th><th></th></tr></thead>
+                    <tbody>
+                    {% for u in users %}
+                        <tr>
+                            <td>{{ u.name }}</td>
+                            <td>{{ u.email }}</td>
+                            <td>{{ u.occupation or '-' }}</td>
+                            <td>{{ u.city or '-' }}</td>
+                            <td>{% if u.is_admin %}<span class="badge bg-primary">Admin</span>{% else %}<span class="badge bg-secondary">User</span>{% endif %}</td>
+                            <td class="text-muted small">{{ u.created_at.strftime('%d %b %Y') }}</td>
+                            <td>
+                                {% if not u.is_admin %}
+                                <form method="POST" action="{{ url_for('main.admin_delete_user', user_id=u.id) }}" onsubmit="return confirm('Delete this user and all their data?');">
+                                    <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+                                    <button class="btn btn-sm btn-outline-danger"><i class="bi bi-trash"></i></button>
+                                </form>
+                                {% endif %}
+                            </td>
+                        </tr>
+                    {% else %}
+                        <tr><td colspan="7" class="text-center text-muted py-4">No users found.</td></tr>
+                    {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}

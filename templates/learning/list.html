@@ -1,0 +1,29 @@
+{% extends "base.html" %}
+{% block title %}Learning Modules — FinShield AI{% endblock %}
+
+{% block content %}
+<section class="fs-page-header text-center">
+    <div class="container">
+        <h1 class="text-white">Learning Modules</h1>
+        <p class="text-white-50 mb-0">In-depth, example-driven guides to build your financial and digital safety knowledge.</p>
+    </div>
+</section>
+
+<section class="py-5 fs-section">
+    <div class="container">
+        <div class="row g-4">
+            {% for slug, article in articles %}
+            <div class="col-md-6 col-lg-4">
+                <a href="{{ url_for('main.learning_article', slug=slug) }}" class="fs-learn-card">
+                    <div class="fs-learn-icon"><i class="bi {{ article.icon }}"></i></div>
+                    <span class="fs-learn-category">{{ article.category }}</span>
+                    <h5>{{ article.title }}</h5>
+                    <p>{{ article.summary }}</p>
+                    <span class="fs-link">Read Module <i class="bi bi-arrow-right"></i></span>
+                </a>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</section>
+{% endblock %}

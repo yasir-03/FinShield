@@ -1,0 +1,77 @@
+{% extends "base.html" %}
+{% block title %}{{ article.title }} — FinShield AI{% endblock %}
+
+{% block content %}
+<section class="fs-page-header">
+    <div class="container">
+        <nav aria-label="breadcrumb">
+            <ol class="breadcrumb fs-breadcrumb">
+                <li class="breadcrumb-item"><a href="{{ url_for('main.learning_list') }}">Learning</a></li>
+                <li class="breadcrumb-item active text-white-50">{{ article.category }}</li>
+            </ol>
+        </nav>
+        <h1 class="text-white"><i class="bi {{ article.icon }} me-2"></i>{{ article.title }}</h1>
+        <p class="text-white-50 mb-0">{{ article.summary }}</p>
+    </div>
+</section>
+
+<section class="py-5 fs-section">
+    <div class="container">
+        <div class="row g-4">
+            <div class="col-lg-8">
+                <div class="fs-panel mb-4">
+                    <h5 class="mb-3"><i class="bi bi-journal-text me-2"></i>Explanation</h5>
+                    {% for para in article.explanation %}
+                    <p class="fs-article-text">{{ para }}</p>
+                    {% endfor %}
+                </div>
+
+                <div class="fs-panel mb-4">
+                    <h5 class="mb-3"><i class="bi bi-lightbulb me-2"></i>Real-World Examples</h5>
+                    <ul class="fs-example-list">
+                        {% for ex in article.examples %}
+                        <li>{{ ex }}</li>
+                        {% endfor %}
+                    </ul>
+                </div>
+
+                <div class="fs-panel fs-panel-tips mb-4">
+                    <h5 class="mb-3 text-white"><i class="bi bi-star-fill me-2"></i>Practical Tips</h5>
+                    <ul class="fs-tips-list">
+                        {% for tip in article.tips %}
+                        <li>{{ tip }}</li>
+                        {% endfor %}
+                    </ul>
+                </div>
+
+                <div class="fs-panel fs-panel-mistakes">
+                    <h5 class="mb-3"><i class="bi bi-exclamation-triangle-fill me-2 text-danger"></i>Common Mistakes to Avoid</h5>
+                    <ul class="fs-mistakes-list">
+                        {% for m in article.mistakes %}
+                        <li>{{ m }}</li>
+                        {% endfor %}
+                    </ul>
+                </div>
+            </div>
+
+            <div class="col-lg-4">
+                <div class="fs-panel mb-4">
+                    <h6 class="mb-3">Test what you learned</h6>
+                    <p class="text-muted small">Reinforce this topic with a quick quiz.</p>
+                    <a href="{{ url_for('quiz.categories') }}" class="btn btn-fs-primary w-100">Take a Quiz</a>
+                </div>
+                <div class="fs-panel">
+                    <h6 class="mb-3">Related Modules</h6>
+                    {% for oslug, oarticle in others %}
+                    <a href="{{ url_for('main.learning_article', slug=oslug) }}" class="fs-reco-item">
+                        <i class="bi {{ oarticle.icon }}"></i>
+                        <div><strong>{{ oarticle.title }}</strong><span>{{ oarticle.category }}</span></div>
+                        <i class="bi bi-chevron-right ms-auto"></i>
+                    </a>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}

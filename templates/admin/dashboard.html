@@ -1,0 +1,70 @@
+{% extends "base.html" %}
+{% block title %}Admin Dashboard — FinShield AI{% endblock %}
+
+{% block content %}
+<section class="fs-page-header">
+    <div class="container">
+        <h1 class="text-white"><i class="bi bi-speedometer2 me-2"></i>Admin Dashboard</h1>
+        <p class="text-white-50 mb-0">Platform overview and management.</p>
+    </div>
+</section>
+
+<section class="py-5 fs-section">
+    <div class="container">
+        <div class="fs-admin-tabs mb-4">
+            <a href="{{ url_for('main.admin_dashboard') }}" class="active">Overview</a>
+            <a href="{{ url_for('main.admin_users') }}">Users</a>
+            <a href="{{ url_for('main.admin_quiz_results') }}">Quiz Results</a>
+            <a href="{{ url_for('main.admin_survey_results') }}">Survey Responses</a>
+            <a href="{{ url_for('main.admin_feedback') }}">Feedback</a>
+        </div>
+
+        <div class="row g-4 mb-4">
+            <div class="col-md-4 col-6">
+                <div class="fs-dash-stat"><i class="bi bi-people text-primary"></i><h3>{{ stats.users }}</h3><p>Total Users</p></div>
+            </div>
+            <div class="col-md-4 col-6">
+                <div class="fs-dash-stat"><i class="bi bi-patch-question text-info"></i><h3>{{ stats.quizzes }}</h3><p>Quizzes Taken</p></div>
+            </div>
+            <div class="col-md-4 col-6">
+                <div class="fs-dash-stat"><i class="bi bi-clipboard-data text-success"></i><h3>{{ stats.survey_responses }}</h3><p>Survey Responses</p></div>
+            </div>
+            <div class="col-md-4 col-6">
+                <div class="fs-dash-stat"><i class="bi bi-envelope text-warning"></i><h3>{{ stats.feedback }}</h3><p>Feedback Received</p></div>
+            </div>
+            <div class="col-md-4 col-6">
+                <div class="fs-dash-stat"><i class="bi bi-robot text-danger"></i><h3>{{ stats.chats }}</h3><p>Chatbot Messages</p></div>
+            </div>
+        </div>
+
+        <div class="row g-4">
+            <div class="col-lg-6">
+                <div class="fs-panel">
+                    <h6 class="mb-3">Recent Users</h6>
+                    {% for u in recent_users %}
+                    <div class="fs-admin-row">
+                        <div><strong>{{ u.name }}</strong><br><span class="text-muted small">{{ u.email }}</span></div>
+                        <span class="text-muted small">{{ u.created_at.strftime('%d %b %Y') }}</span>
+                    </div>
+                    {% else %}
+                    <p class="text-muted small mb-0">No users yet.</p>
+                    {% endfor %}
+                </div>
+            </div>
+            <div class="col-lg-6">
+                <div class="fs-panel">
+                    <h6 class="mb-3">Recent Feedback</h6>
+                    {% for f in recent_feedback %}
+                    <div class="fs-admin-row">
+                        <div><strong>{{ f.name }}</strong><br><span class="text-muted small">{{ f.subject or 'No Subject' }}</span></div>
+                        <span class="text-muted small">{{ f.created_at.strftime('%d %b %Y') }}</span>
+                    </div>
+                    {% else %}
+                    <p class="text-muted small mb-0">No feedback yet.</p>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}

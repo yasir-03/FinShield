@@ -1,0 +1,36 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.egg-info/
+.eggs/
+
+# Virtual environments
+venv/
+env/
+.venv/
+
+# Flask instance / database
+instance/
+database/*.db
+*.db
+*.sqlite
+*.sqlite3
+
+# Environment variables / secrets
+.env
+.flaskenv
+
+# Uploads
+static/uploads/*
+!static/uploads/.gitkeep
+
+# IDE / OS
+.vscode/
+.idea/
+*.swp
+.DS_Store
+Thumbs.db
+
+# Logs
+*.log

@@ -1,0 +1,66 @@
+{% extends "base.html" %}
+{% block title %}FinBot — Your AI Financial Assistant{% endblock %}
+{% block body_class %}fs-chat-page{% endblock %}
+
+{% block content %}
+<section class="fs-chat-wrap">
+    <div class="container-fluid px-lg-5">
+        <div class="row fs-chat-shell g-0">
+            <div class="col-lg-3 fs-chat-sidebar">
+                <div class="fs-chat-bot-intro">
+                    <div class="fs-bot-avatar"><i class="bi bi-robot"></i></div>
+                    <h5 class="mt-3 mb-1">FinBot</h5>
+                    <p class="small text-muted mb-0">Your AI financial literacy assistant</p>
+                    <span class="badge bg-success mt-2"><i class="bi bi-circle-fill me-1" style="font-size:6px;"></i>Online</span>
+                </div>
+                <hr>
+                <h6 class="small text-uppercase text-muted px-1">Suggested Questions</h6>
+                <div class="fs-suggested-list">
+                    {% for q in suggested %}
+                    <button type="button" class="fs-suggested-chip" data-question="{{ q }}">{{ q }}</button>
+                    {% endfor %}
+                </div>
+                <hr>
+                <h6 class="small text-uppercase text-muted px-1">I can help with</h6>
+                <div class="fs-topic-tags">
+                    {% for t in ["Savings","Budget","Inflation","UPI","Digital Banking","Cyber Fraud","Mutual Funds","Insurance","Investment","RBI","SEBI","Loans","Credit Score"] %}
+                    <span class="fs-tag">{{ t }}</span>
+                    {% endfor %}
+                </div>
+            </div>
+
+            <div class="col-lg-9 fs-chat-main">
+                <div class="fs-chat-messages" id="chatMessages">
+                    <div class="fs-msg fs-msg-bot">
+                        <div class="fs-msg-avatar"><i class="bi bi-robot"></i></div>
+                        <div class="fs-msg-bubble">Hi! I'm FinBot 👋 Ask me anything about savings, budgeting, UPI safety, cyber fraud, investments, insurance, and more.</div>
+                    </div>
+                    {% for h in history %}
+                    <div class="fs-msg fs-msg-user">
+                        <div class="fs-msg-bubble">{{ h.message }}</div>
+                        <div class="fs-msg-avatar"><i class="bi bi-person-fill"></i></div>
+                    </div>
+                    <div class="fs-msg fs-msg-bot">
+                        <div class="fs-msg-avatar"><i class="bi bi-robot"></i></div>
+                        <div class="fs-msg-bubble">{{ h.response }}</div>
+                    </div>
+                    {% endfor %}
+                </div>
+                <div class="fs-chat-input-bar">
+                    <form id="chatForm" class="d-flex gap-2 align-items-center w-100">
+                        <input type="text" id="chatInput" class="form-control fs-input" placeholder="Ask FinBot about savings, UPI, fraud, investing..." autocomplete="off" maxlength="500">
+                        <button type="submit" class="btn btn-fs-primary fs-send-btn"><i class="bi bi-send-fill"></i></button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+    const CHAT_API_URL = "{{ url_for('chatbot.chat_api') }}";
+</script>
+<script src="{{ url_for('static', filename='js/chatbot.js') }}"></script>
+{% endblock %}

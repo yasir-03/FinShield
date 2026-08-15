@@ -1,0 +1,75 @@
+{% extends "base.html" %}
+{% block title %}Quiz Result — FinShield AI{% endblock %}
+
+{% block content %}
+<section class="fs-page-header text-center">
+    <div class="container">
+        <h1 class="text-white">Quiz Complete!</h1>
+        <p class="text-white-50 mb-0">{{ meta.name }} Quiz Results</p>
+    </div>
+</section>
+
+<section class="py-5 fs-section">
+    <div class="container">
+        <div class="row justify-content-center mb-5">
+            <div class="col-lg-6">
+                <div class="fs-result-card text-center">
+                    <div class="fs-score-circle" style="--pct: {{ percentage }}">
+                        <span>{{ percentage }}%</span>
+                    </div>
+                    <h4 class="mt-3">You scored {{ score }} out of {{ total }}</h4>
+                    <span class="badge bg-{{ color }} fs-6 px-3 py-2 mt-2">{{ label }}</span>
+                    {% if time_taken %}
+                    <p class="text-muted small mt-3 mb-0"><i class="bi bi-clock-history"></i> Completed in {{ time_taken }} seconds</p>
+                    {% endif %}
+                    <div class="d-flex gap-3 justify-content-center mt-4">
+                        <a href="{{ url_for('quiz.take_quiz', category=category) }}" class="btn btn-fs-outline">Retake Quiz</a>
+                        <a href="{{ url_for('quiz.categories') }}" class="btn btn-fs-primary">More Quizzes</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        {% if recommendations.articles %}
+        <div class="fs-panel mb-5">
+            <h5 class="mb-3"><i class="bi bi-lightbulb me-2"></i>Recommended Next Steps</h5>
+            {% for reason in recommendations.reasons %}
+                <p class="text-muted small mb-3">{{ reason }}</p>
+            {% endfor %}
+            <div class="row g-3">
+                {% for article in recommendations.articles %}
+                <div class="col-md-6">
+                    <a href="{{ url_for('main.learning_article', slug=article.slug) }}" class="fs-reco-item">
+                        <i class="bi {{ article.icon }}"></i>
+                        <div><strong>{{ article.title }}</strong><span>{{ article.summary }}</span></div>
+                        <i class="bi bi-chevron-right ms-auto"></i>
+                    </a>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+        {% endif %}
+
+        <h5 class="mb-3"><i class="bi bi-clipboard-check me-2"></i>Answer Review</h5>
+        {% for item in review %}
+        <div class="fs-panel fs-review-card mb-3 {{ 'fs-review-correct' if item.is_correct else 'fs-review-wrong' }}">
+            <div class="d-flex align-items-start gap-2 mb-2">
+                <i class="bi {{ 'bi-check-circle-fill text-success' if item.is_correct else 'bi-x-circle-fill text-danger' }} fs-5"></i>
+                <h6 class="mb-0">{{ item.question }}</h6>
+            </div>
+            <div class="fs-review-options">
+                {% for opt in item.options %}
+                <div class="fs-review-option
+                    {% if loop.index0 == item.correct %} correct{% endif %}
+                    {% if loop.index0 == item.selected and not item.is_correct %} wrong-selected{% endif %}">
+                    {{ opt }}
+                    {% if loop.index0 == item.correct %}<i class="bi bi-check-lg ms-auto"></i>{% endif %}
+                    {% if loop.index0 == item.selected and not item.is_correct %}<i class="bi bi-x-lg ms-auto"></i>{% endif %}
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+</section>
+{% endblock %}

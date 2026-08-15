@@ -1,0 +1,74 @@
+{% extends "base.html" %}
+{% block title %}My Profile — FinShield AI{% endblock %}
+
+{% block content %}
+<section class="fs-page-header">
+    <div class="container">
+        <h1 class="text-white">My Profile</h1>
+        <p class="text-white-50 mb-0">Manage your account and view your quiz history.</p>
+    </div>
+</section>
+
+<section class="py-5 fs-section">
+    <div class="container">
+        <div class="row g-4">
+            <div class="col-lg-5">
+                <div class="fs-panel">
+                    <h5 class="mb-4"><i class="bi bi-person-gear me-2"></i>Account Details</h5>
+                    <form method="POST" action="{{ url_for('main.profile') }}">
+                        <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+                        <div class="mb-3">
+                            <label class="form-label">Full Name</label>
+                            <input type="text" name="name" class="form-control fs-input" value="{{ current_user.name }}" required>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Email Address</label>
+                            <input type="email" class="form-control fs-input" value="{{ current_user.email }}" disabled>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Occupation</label>
+                            <input type="text" name="occupation" class="form-control fs-input" value="{{ current_user.occupation or '' }}">
+                        </div>
+                        <div class="mb-4">
+                            <label class="form-label">City</label>
+                            <input type="text" name="city" class="form-control fs-input" value="{{ current_user.city or '' }}">
+                        </div>
+                        <button type="submit" class="btn btn-fs-primary w-100">Save Changes</button>
+                    </form>
+                </div>
+
+                <div class="fs-panel mt-4 text-center">
+                    <i class="bi bi-award fs-1 text-warning"></i>
+                    <h3 class="mt-2">{{ current_user.average_score }}%</h3>
+                    <p class="text-muted mb-0">Average Quiz Score across {{ current_user.quiz_count }} attempt(s)</p>
+                </div>
+            </div>
+
+            <div class="col-lg-7">
+                <div class="fs-panel">
+                    <h5 class="mb-3"><i class="bi bi-list-check me-2"></i>Quiz History</h5>
+                    {% if results %}
+                    <div class="table-responsive">
+                        <table class="table fs-table align-middle">
+                            <thead><tr><th>Category</th><th>Score</th><th>Time</th><th>Date</th></tr></thead>
+                            <tbody>
+                            {% for r in results %}
+                                <tr>
+                                    <td class="text-capitalize">{{ r.category.replace('-', ' ') }}</td>
+                                    <td>{{ r.score }}/{{ r.total_questions }} ({{ r.percentage }}%)</td>
+                                    <td class="text-muted">{{ r.time_taken }}s</td>
+                                    <td class="text-muted small">{{ r.taken_at.strftime('%d %b %Y, %I:%M %p') }}</td>
+                                </tr>
+                            {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                    {% else %}
+                    <p class="text-muted text-center py-4 mb-0">No quiz attempts yet. <a href="{{ url_for('quiz.categories') }}" class="fs-link">Take one now</a>.</p>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}

@@ -1,0 +1,43 @@
+{% extends "base.html" %}
+{% block title %}Quizzes — FinShield AI{% endblock %}
+
+{% block content %}
+<section class="fs-page-header">
+    <div class="container text-center">
+        <h1 class="text-white">Test Your Financial Knowledge</h1>
+        <p class="text-white-50 mb-0">Pick a category and take a timed quiz to see how you score.</p>
+    </div>
+</section>
+
+<section class="py-5 fs-section">
+    <div class="container">
+        <div class="row g-4">
+            {% for key, meta in categories.items() %}
+            <div class="col-md-6 col-lg-4">
+                <div class="fs-quiz-card">
+                    <div class="fs-quiz-icon" style="background:{{ meta.color }}22; color:{{ meta.color }};">
+                        <i class="bi {{ meta.icon }}"></i>
+                    </div>
+                    <h5>{{ meta.name }}</h5>
+                    {% if key in user_results %}
+                        {% set r = user_results[key] %}
+                        <p class="text-muted small mb-2">Last score: <strong>{{ r.percentage }}%</strong></p>
+                    {% else %}
+                        <p class="text-muted small mb-2">Not attempted yet</p>
+                    {% endif %}
+                    <a href="{{ url_for('quiz.take_quiz', category=key) }}" class="btn btn-fs-outline w-100 mt-2">
+                        {% if key in user_results %}Retake Quiz{% else %}Start Quiz{% endif %}
+                    </a>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+        {% if not current_user.is_authenticated %}
+        <div class="text-center mt-5">
+            <p class="text-muted">You'll need an account to save your quiz results.</p>
+            <a href="{{ url_for('main.register') }}" class="btn btn-fs-primary">Create Free Account</a>
+        </div>
+        {% endif %}
+    </div>
+</section>
+{% endblock %}
