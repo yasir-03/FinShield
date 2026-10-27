@@ -21,11 +21,16 @@ def create_app():
     from quiz import quiz_bp
     from survey import survey_bp
     from chatbot import chatbot_bp
+    from decision_rehearsal import decision_rehearsal_bp
 
     app.register_blueprint(main_bp)
     app.register_blueprint(quiz_bp)
     app.register_blueprint(survey_bp)
     app.register_blueprint(chatbot_bp)
+    app.register_blueprint(decision_rehearsal_bp)
+    with app.app_context():
+         from database import db
+         db.create_all()
     csrf.exempt(chatbot_bp)
 
     @app.context_processor
