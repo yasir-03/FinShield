@@ -11,8 +11,8 @@ def create_app():
     app = Flask(__name__)
     app.config.from_object(Config)
 
+    if not os.environ.get("VERCEL"):
     os.makedirs(os.path.join(app.root_path, "instance"), exist_ok=True)
-
     init_db(app)
 
     csrf = CSRFProtect(app)
